@@ -1,0 +1,75 @@
+eureka:
+  client:
+    enabled: false
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: false
+      enabled: false
+  autoconfigure:
+    exclude:
+    - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
+    - org.springframework.boot.actuate.autoconfigure.metrics.KafkaMetricsAutoConfiguration
+    - org.springframework.cloud.stream.config.BindingsEndpointAutoConfiguration
+    - org.springframework.cloud.stream.config.ChannelBindingAutoConfiguration
+    - org.springframework.cloud.stream.config.ChannelsEndpointAutoConfiguration
+    - org.springframework.cloud.stream.config.BindersHealthIndicatorAutoConfiguration
+  web:
+    resources:
+      addMappings: false
+  mvc:
+    throwExceptionIfNoHandlerFound: true
+    pathmatch:
+      matching-strategy: ant-path-matcher
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        ddl-auto: create-drop
+  datasource:
+    url: jdbc:h2:mem:in-memory-db;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: admin
+    password: 
+    hikari:
+      maxLifetime: 300
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  main:
+    banner-mode: OFF
+    log-startup-info: false
+  kafka:
+    producer:
+      properties:
+        autoStartup: false
+    consumer:
+      properties:
+        autoStartup: false
+udemy:
+  topics:
+    sync: 
+      t-topic:
+        request: t-topic-sync
+        reply: t-topic-sync-reply-course
+      t-course:
+        request: t-course-sync
+        reply:
+          checkout: t-course-sync-reply-checkout
+          user-course: t-course-sync-reply-user-course
+          cart: t-course-sync-reply-cart
+      t-user-topic:
+        request: t-user-topic-sync
+        reply: t-user-topic-sync-reply-course
+      t-rating:
+        request: t-rating-sync
+        reply: t-rating-sync-reply-course
+    t-course-event: t-course-event
