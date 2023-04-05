@@ -1,4 +1,4 @@
-package mx.com.course.config;
+/*package mx.com.course.config;
 
 import org.springframework.context.annotation.Configuration;
 
@@ -10,3 +10,4 @@ public class SleuthConfig {
       return Sampler.ALWAYS_SAMPLE;
    }
 }
+*/

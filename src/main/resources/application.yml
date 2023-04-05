@@ -1,20 +1,85 @@
+logging:
+  level:
+    org:
+      apache:
+        kafka: OFF
+server:
+  port: 9086
 spring:
   application:
     name: cloud-udemy-cart
-  config:
-    import: "optional:configserver:"
+#  config:
+#    import: "optional:configserver:"
   cloud:
     config:
       profile: default
       discovery:
-        enabled: true
+        enabled: false
         service-id: cloud-udemy-config
       retry:
         initial-interval: 2000
         multiplier: 1.5
         max-interval: 60000
         max-attempts: 100
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  web:
+    resources:
+      addMappings: false
+  h2:
+    console:
+      enabled: true
+      path: /h2
+      settings:
+        web-allow-others: true
+  mvc:
+    throwExceptionIfNoHandlerFound: true
+    pathmatch:
+      matching-strategy: ant-path-matcher
+  datasource:
+    url: jdbc:h2:mem:in-memory-db;DB_CLOSE_DELAY=-1
+    driverClassName: org.h2.Driver
+    username: admin
+    password: 
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate: 
+      ddl-auto: create-drop
+    show-sql: true
+  main:
+    banner-mode: OFF
+    log-startup-info: false
+  kafka:
+    listener:
+      missing-topics-fatal: false
+    producer:
+      bootstrap-servers: ${KAFKA_URL:localhost:9092}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: udemy-cart-cg
+      enable-auto-commit: true
+      auto-offset-reset: earliest
+      bootstrap-servers: ${KAFKA_URL:localhost:9092}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer        
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: mx.com.course.broker.message.*
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+
+udemy:
+  topics:
+    sync:
+      t-course:
+        request: t-course-sync
+        reply: t-course-sync-reply-cart
+      t-cart:
+        request: t-cart-sync
+        reply: t-cart-sync-reply
+    t-order-event: t-order-event
+    t-user-event: t-user-event
+    t-course-event: t-course-event
